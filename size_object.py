@@ -4,7 +4,15 @@ from object_detector import HomogeneousBgDetector
 
 # Load the image
 img = cv2.imread("images/img4.jpg")
-img = cv2.resize(img, (640, 480))
+# Define the scale factor (e.g., 0.5 for 50% reduction)
+scale_percent = 0.25  
+
+# Compute new dimensions while maintaining aspect ratio
+new_width = int(img.shape[1] * scale_percent)
+new_height = int(img.shape[0] * scale_percent)
+
+# Resize image
+img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_AREA)
 
 # Initialize the detector
 detector = HomogeneousBgDetector()
