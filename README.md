@@ -69,6 +69,7 @@ Displays object width and height on the output image or video feed.
 The processed image or video feed will display detected objects with dimensions annotated as follows:
 
 Width: 12.3 cm
+
 Height: 8.7 cm
 
 ### Future Improvements
