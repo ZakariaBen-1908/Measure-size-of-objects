@@ -39,6 +39,7 @@ while True:
 
         # Aruco Parameters
         aruco_perimeter = cv2.arcLength(corners[0], True)
+        print(aruco_perimeter)
 
         # Pixel to cm ratio
         pixel_to_cm = aruco_perimeter / 20
@@ -46,10 +47,9 @@ while True:
 
         countours = detector.detect_objects(img)
 
-        #Draw objects boundaries
+        # Draw objects boundaries
         for cnt in countours:
-
-            #Draw rect
+            # Draw rect
             rect = cv2.minAreaRect(cnt)
             (x, y), (w, h), angle = rect
 
@@ -65,6 +65,22 @@ while True:
             cv2.polylines(img, [box], True, (255, 0, 0), 2)
             cv2.putText(img, "Width {}".format(round(object_width, 1)), (int(x - 100), int(y - 15)), cv2.FONT_HERSHEY_PLAIN, 1, (100, 244, 0), 2)
             cv2.putText(img, "Height {}".format(round(object_height, 1)), (int(x - 100), int(y + 15)), cv2.FONT_HERSHEY_PLAIN, 1, (100, 244, 0), 2)
+
+            # Check if corners form a rectangle or are on the edge
+            img_height, img_width = img.shape[:2]
+            edge_corners = 0
+            for corner in box:
+                cx, cy = corner.ravel()
+                if cx <= 5 or cx >= img_width - 5 or cy <= 5 or cy >= img_height - 5:
+                    edge_corners += 1
+            
+            if edge_corners > 0:
+                status = "Object has edge corners"
+            else:
+                status = "Object is fully inside"
+            
+            cv2.putText(img, status, (int(x - 100), int(y + 30)), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255), 2)
+            print(f"Object at ({int(x)}, {int(y)}): {status}")
 
 
 
